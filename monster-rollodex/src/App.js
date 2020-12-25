@@ -1,32 +1,40 @@
 
 import React from 'react'
-import {SearchBox} from './component/search-box/search-box.component.jsx'
+import { CardList } from './component/card-list/card-list.component.jsx'
+import { SearchBox } from './component/search-box/search-box.component.jsx'
 
 
-class App extends React.Component{
-  constructor () {
+class App extends React.Component {
+
+  constructor() {
     super()
     this.state = {
-      monster: [],
-      search:''
+      monsters: [],
+      searchField: ''
     }
+  }  
+
+  componentDidMount() {
+    fetch('https://jsonplaceholder.typicode.com/users') 
+    .then(response=>response.json())
+    .then(users=>this.setState({monsters:users}) )
   }
 
-  render () {
+  //onSearchChnage = event
+  render() {
+    const {monsters, searchField} = this.state
+
+    const fileterMonsters = monsters.filter(
+      monster => monster.name.includes(searchField)
+    )
     return (
       <div>
-      <h1> Monster's Rollodex</h1>
-     <SearchBox/>
-      <div className='card-list'>
-        <div className='card-container'>
-          <img alt='monster' src='https://robohash.org/1?set=set2&size=180x180'></img>
-            <h2> Moster Name</h2>
-            <p>Email </p>
-        </div>
+        <h1> Monster's Rollodex</h1>
+        <SearchBox onSearchChange = {this.onSearchChange}/>
+        <CardList monsters ={this.state.monsters}/>
+        
 
       </div>
-
-    </div>
     )
   }
 
