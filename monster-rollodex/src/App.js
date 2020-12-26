@@ -1,44 +1,46 @@
-
 import React from 'react'
-import { CardList } from './component/card-list/card-list.component.jsx'
-import { SearchBox } from './component/search-box/search-box.component.jsx'
 
+import './App.css'
+import { CardList } from './components/card-list/card-list.component'
 
-class App extends React.Component {
+import {SearchBox} from './components/search-box/search-box.component'
 
-  constructor() {
+class App extends React.Component{
+  constructor(){
     super()
     this.state = {
       monsters: [],
-      searchField: ''
+      searchField: '',
     }
-  }  
-
-  componentDidMount() {
-    fetch('https://jsonplaceholder.typicode.com/users') 
-    .then(response=>response.json())
-    .then(users=>this.setState({monsters:users}) )
   }
 
-  //onSearchChnage = event
-  render() {
-    const {monsters, searchField} = this.state
+  componentDidMount(){
+    fetch('https://jsonplaceholder.typicode.com/users')
+    .then(response => response.json() )
+    .then(users => this.setState({monsters: users}))
+  }
 
-    const fileterMonsters = monsters.filter(
-      monster => monster.name.includes(searchField)
+  onSearchChange = event => {
+    this.setState({searchField: event.target.value})
+  }
+
+  render(){
+
+    // Object Destructuring 
+    const { monsters, searchField } = this.state
+    console.log(searchField)
+
+    const filteredMonsters = monsters.filter(
+      monster => monster.name.toLowerCase().includes(searchField)
     )
-    return (
-      <div>
-        <h1> Monster's Rollodex</h1>
-        <SearchBox onSearchChange = {this.onSearchChange}/>
-        <CardList monsters ={this.state.monsters}/>
-        
 
+    return(
+      <div className='App'>
+        <h1>Monster's Rollodex</h1>
+        <SearchBox onSearchChange = {this.onSearchChange}/>
+        <CardList monsters = {filteredMonsters}/>
       </div>
     )
   }
-
 }
-
-
 export default App;
